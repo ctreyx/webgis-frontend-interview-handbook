@@ -23,6 +23,16 @@
 
     <div class="topbar-actions">
       <span class="time-badge">{{ currentTime }}</span>
+      <div class="settings-wrap">
+        <button class="settings-btn" @click="showSettings = !showSettings" title="设置">
+          <span class="settings-icon" :class="{ spinning: showSettings }">⚙️</span>
+        </button>
+        <transition name="pop">
+          <div class="settings-popover-wrap" v-if="showSettings">
+            <SettingsPanel />
+          </div>
+        </transition>
+      </div>
     </div>
   </header>
 </template>
@@ -31,11 +41,13 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/stores/appStore'
+import SettingsPanel from '@/components/SettingsPanel.vue'
 
 const app = useAppStore()
 const route = useRoute()
 const searchText = ref(app.searchQuery)
 const currentTime = ref('')
+const showSettings = ref(false)
 
 let timer: ReturnType<typeof setInterval>
 
@@ -186,5 +198,61 @@ onUnmounted(() => {
 
 .back-label {
   font-weight: 500;
+}
+
+.settings-wrap {
+  position: relative;
+}
+
+.settings-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--bg-glass);
+  transition: all var(--transition-fast);
+
+  &:hover {
+    background: var(--bg-glass-strong);
+  }
+}
+
+.settings-icon {
+  font-size: 16px;
+  transition: transform var(--transition-normal);
+
+  &.spinning {
+    animation: spin 0.8s ease;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(180deg); }
+}
+
+.settings-popover-wrap {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 200;
+}
+
+.pop-enter-active,
+.pop-leave-active {
+  transition: all var(--transition-normal);
+  transform-origin: top right;
+}
+
+.pop-enter-from,
+.pop-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
 }
 </style>

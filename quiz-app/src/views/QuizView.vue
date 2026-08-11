@@ -762,10 +762,13 @@ function statusLabel(s: string) {
 }
 
 .compare-panel {
-  background: var(--bg-secondary);
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   overflow: hidden;
+  box-shadow: var(--shadow-sm);
 
   &.user-answer {
     border-color: var(--border-medium);
@@ -773,6 +776,7 @@ function statusLabel(s: string) {
 
   &.correct-answer {
     border-color: var(--success);
+    background: var(--bg-glass);
   }
 }
 

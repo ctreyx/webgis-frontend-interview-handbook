@@ -25,7 +25,20 @@
 
     <!-- 答案内容 -->
     <div class="answer-section">
-      <MarkdownRenderer :content="question.content" />
+      <div class="answer-glass" :class="{ 'answer-hidden': !answerRevealed }">
+        <div
+          class="answer-overlay"
+          v-if="!answerRevealed"
+          @click="answerRevealed = true"
+        >
+          <span class="overlay-lock">🔒</span>
+          <span class="overlay-text">点击显示答案</span>
+          <span class="overlay-sub">(全局设置为「默认隐藏答案」)</span>
+        </div>
+        <div :class="{ 'answer-blur': !answerRevealed }">
+          <MarkdownRenderer :content="question.content" />
+        </div>
+      </div>
     </div>
 
     <!-- 导航 -->
@@ -55,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/stores/appStore'
 import { useQuizStore } from '@/stores/quizStore'
@@ -65,6 +78,17 @@ import MarkdownRenderer from '@/components/MarkdownRenderer.vue'
 const route = useRoute()
 const app = useAppStore()
 const quiz = useQuizStore()
+
+// 答案是否显示（由全局设置决定默认值）
+const answerRevealed = ref(app.showAnswerDefault)
+
+// 切换题目时重置显示状态
+watch(
+  () => route.params.id,
+  () => {
+    answerRevealed.value = app.showAnswerDefault
+  }
+)
 
 const question = computed(() => app.getQuestionById(decodeURIComponent(route.params.id as string)))
 
@@ -159,10 +183,61 @@ const masteryOptions = [
 }
 
 .answer-section {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+.answer-glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-medium);
   border-radius: var(--radius-xl);
   padding: 32px;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-slow);
+  position: relative;
+  overflow: hidden;
+
+  &.answer-hidden {
+    cursor: pointer;
+  }
+}
+
+.answer-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: var(--radius-xl);
+  transition: all var(--transition-normal);
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.5);
+    .overlay-lock { transform: scale(1.2); }
+  }
+}
+
+.overlay-lock {
+  font-size: 36px;
+  transition: transform var(--transition-fast);
+}
+
+.overlay-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.overlay-sub {
+  font-size: 12px;
+  color: var(--text-muted);
 }
 
 .question-nav {
