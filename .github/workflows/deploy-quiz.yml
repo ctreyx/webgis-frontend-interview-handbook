@@ -3,9 +3,6 @@ name: Deploy Quiz App to GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - 'quiz-app/**'
-      - '.github/workflows/deploy-quiz.yml'
   workflow_dispatch:
 
 permissions:
