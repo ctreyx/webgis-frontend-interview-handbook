@@ -279,3 +279,34 @@ html.theme-transition * {
               box-shadow var(--transition-slow) !important;
 }
 
+// ===== 移动端响应式 =====
+$mobile-breakpoint: 768px;
+
+@media (max-width: $mobile-breakpoint) {
+  :root {
+    --sidebar-width: 0px;
+    --topbar-height: 48px;
+  }
+
+  html, body {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  // App.vue 布局覆盖
+  .app-layout {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  .content-area {
+    padding: 12px 16px 24px !important;
+  }
+}
+

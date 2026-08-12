@@ -288,4 +288,38 @@ function openQuestion(id: string) {
 
   &:hover { background: var(--border-strong); }
 }
+
+// ===== 移动端响应式 =====
+@media (max-width: 768px) {
+  .browse-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 14px;
+  }
+
+  .question-grid {
+    gap: 10px;
+  }
+
+  .question-card {
+    padding: 14px 16px;
+  }
+
+  .question-title {
+    font-size: 14px;
+  }
+
+  .category-section h3 {
+    font-size: 13px;
+  }
+}
 </style>

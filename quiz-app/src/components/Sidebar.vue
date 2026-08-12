@@ -1,7 +1,20 @@
 <template>
-  <aside class="sidebar" :class="{ collapsed: app.sidebarCollapsed }">
+  <!-- 移动端遮罩 -->
+  <div
+    class="sidebar-overlay"
+    :class="{ visible: app.mobileMenuOpen }"
+    @click="app.closeMobileMenu"
+  ></div>
+
+  <aside
+    class="sidebar"
+    :class="{
+      collapsed: app.sidebarCollapsed,
+      'mobile-open': app.mobileMenuOpen
+    }"
+  >
     <div class="sidebar-header">
-      <div class="logo" @click="$router.push('/')">
+      <div class="logo" @click="goHome">
         <span class="logo-icon">🧠</span>
         <span class="logo-text" v-show="!app.sidebarCollapsed">面试题库</span>
       </div>
@@ -9,22 +22,30 @@
         class="sidebar-toggle"
         @click="app.toggleSidebar"
         :title="app.sidebarCollapsed ? '展开菜单' : '收起菜单'"
+        v-show="!isMobile"
       >
         {{ app.sidebarCollapsed ? '☰' : '◁' }}
+      </button>
+      <button
+        class="sidebar-close-mobile"
+        @click="app.closeMobileMenu"
+        v-show="isMobile"
+      >
+        ✕
       </button>
     </div>
 
     <nav class="sidebar-nav">
-      <router-link to="/" class="nav-item" :class="{ active: $route.name === 'browse' }">
+      <router-link to="/" class="nav-item" :class="{ active: $route.name === 'browse' }" @click="onNavClick">
         <span class="nav-icon">📚</span>
         <span class="nav-label" v-show="!app.sidebarCollapsed">全部题目</span>
         <span class="nav-badge" v-show="!app.sidebarCollapsed">{{ questions.length }}</span>
       </router-link>
-      <router-link to="/quiz" class="nav-item" :class="{ active: $route.name === 'quiz' }">
+      <router-link to="/quiz" class="nav-item" :class="{ active: $route.name === 'quiz' }" @click="onNavClick">
         <span class="nav-icon">🎯</span>
         <span class="nav-label" v-show="!app.sidebarCollapsed">随机考试</span>
       </router-link>
-      <router-link to="/stats" class="nav-item" :class="{ active: $route.name === 'stats' }">
+      <router-link to="/stats" class="nav-item" :class="{ active: $route.name === 'stats' }" @click="onNavClick">
         <span class="nav-icon">📊</span>
         <span class="nav-label" v-show="!app.sidebarCollapsed">学习统计</span>
       </router-link>
@@ -55,6 +76,7 @@
             :key="q.id"
             :to="`/question/${encodeURIComponent(q.id)}`"
             class="cat-question-item"
+            @click="onNavClick"
           >
             {{ q.title }}
           </router-link>
@@ -76,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useAppStore } from '@/stores/appStore'
 import { questions } from '@/data/questions'
 import { useRouter } from 'vue-router'
@@ -84,7 +106,17 @@ import { useRouter } from 'vue-router'
 const app = useAppStore()
 const router = useRouter()
 
-// 记录哪些分类展开了
+const isMobile = computed(() => window.innerWidth <= 768)
+
+function goHome() {
+  router.push('/')
+  if (isMobile.value) app.closeMobileMenu()
+}
+
+function onNavClick() {
+  if (isMobile.value) app.closeMobileMenu()
+}
+
 const expandedCats = ref(new Set<string>())
 
 function toggleCat(key: string) {
@@ -337,5 +369,120 @@ function getCatQuestions(catKey: string) {
 
 .footer-icon {
   font-size: 13px;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.sidebar-close-mobile {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--bg-glass);
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin-left: auto;
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background: var(--bg-glass-strong);
+    color: var(--danger);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px !important;
+    height: 100vh;
+    height: 100dvh;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+    border-right: 1px solid var(--border-medium);
+    transition: transform var(--transition-normal);
+
+    &.mobile-open {
+      transform: translateX(0);
+    }
+
+    &.collapsed {
+      width: 280px !important;
+    }
+  }
+
+  .sidebar-header {
+    padding-right: 8px;
+  }
+
+  .logo {
+    gap: 8px;
+  }
+
+  .logo-icon {
+    font-size: 22px;
+  }
+
+  .logo-text {
+    font-size: 17px;
+  }
+
+  .sidebar-nav {
+    padding: 8px 12px;
+  }
+
+  .nav-item {
+    padding: 12px 14px;
+    font-size: 15px;
+    gap: 12px;
+  }
+
+  .nav-icon {
+    font-size: 20px;
+  }
+
+  .sidebar-categories {
+    padding: 4px 12px;
+  }
+
+  .cat-item {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .cat-question-item {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .sidebar-footer {
+    padding: 14px 16px;
+  }
+
+  .footer-item {
+    font-size: 13px;
+  }
 }
 </style>

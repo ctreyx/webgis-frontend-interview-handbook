@@ -17,6 +17,7 @@ export const useAppStore = defineStore('app', () => {
   const searchQuery = ref('')
   const selectedCategory = ref<string | null>(null)
   const sidebarCollapsed = ref(false)
+  const mobileMenuOpen = ref(false)
   const theme = ref<ThemeKey>(localStorage.getItem('app-theme') as ThemeKey || 'space')
   // 全局设置：是否默认显示答案（false = 默认隐藏答案，需点击显示）
   const showAnswerDefault = ref(localStorage.getItem('app-show-answer') === '1')
@@ -68,6 +69,14 @@ export const useAppStore = defineStore('app', () => {
     sidebarCollapsed.value = !sidebarCollapsed.value
   }
 
+  function toggleMobileMenu() {
+    mobileMenuOpen.value = !mobileMenuOpen.value
+  }
+
+  function closeMobileMenu() {
+    mobileMenuOpen.value = false
+  }
+
   function getQuestionById(id: string): Question | undefined {
     return questions.find(q => q.id === id)
   }
@@ -76,6 +85,7 @@ export const useAppStore = defineStore('app', () => {
     searchQuery,
     selectedCategory,
     sidebarCollapsed,
+    mobileMenuOpen,
     theme,
     showAnswerDefault,
     THEMES,
@@ -84,6 +94,8 @@ export const useAppStore = defineStore('app', () => {
     setCategory,
     setSearch,
     toggleSidebar,
+    toggleMobileMenu,
+    closeMobileMenu,
     setTheme,
     toggleShowAnswerDefault,
     getQuestionById,

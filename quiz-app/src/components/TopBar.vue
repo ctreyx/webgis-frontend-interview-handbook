@@ -1,5 +1,9 @@
 <template>
   <header class="topbar">
+    <button class="mobile-menu-btn" @click="app.toggleMobileMenu" title="菜单">
+      <span>{{ app.mobileMenuOpen ? '✕' : '☰' }}</span>
+    </button>
+
     <div class="search-box" v-if="$route.name === 'browse'">
       <span class="search-icon">🔍</span>
       <input
@@ -254,5 +258,70 @@ onUnmounted(() => {
 .pop-leave-to {
   opacity: 0;
   transform: scale(0.9);
+}
+
+.mobile-menu-btn {
+  display: none;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--bg-glass);
+  color: var(--text-secondary);
+  font-size: 20px;
+  margin-right: 8px;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    background: var(--bg-glass-strong);
+    color: var(--accent-light);
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .topbar {
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .search-box {
+    max-width: none;
+    flex: 1;
+    padding: 0 10px;
+  }
+
+  .search-input {
+    height: 38px;
+    font-size: 16px;
+  }
+
+  .time-badge {
+    display: none;
+  }
+
+  .topbar-title {
+    font-size: 15px;
+  }
+
+  .back-nav {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  .topbar-actions {
+    gap: 8px;
+  }
+
+  .settings-popover-wrap {
+    right: -40px;
+    width: 260px;
+  }
 }
 </style>

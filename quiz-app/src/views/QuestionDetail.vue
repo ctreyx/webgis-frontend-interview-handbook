@@ -289,4 +289,51 @@ const masteryOptions = [
 
   &:hover { background: var(--border-strong); }
 }
+
+// ===== 移动端响应式 =====
+@media (max-width: 768px) {
+  .question-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .question-title {
+    font-size: 18px;
+  }
+
+  .mastery-btns {
+    flex-wrap: wrap;
+  }
+
+  .mastery-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .answer-content {
+    font-size: 14px;
+    padding: 16px;
+  }
+
+  .prev-next {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .prev-next button {
+    width: 100%;
+  }
+
+  pre {
+    font-size: 11px;
+    padding: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  code {
+    font-size: 12px;
+  }
+}
 </style>

@@ -397,4 +397,39 @@ function clearHistory() {
 
   &:hover { background: var(--border-strong); }
 }
+
+// ===== 移动端响应式 =====
+@media (max-width: 768px) {
+  .stats-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .stats-overview {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .overview-card {
+    padding: 14px;
+  }
+
+  .overview-value {
+    font-size: 22px;
+  }
+
+  .category-stats {
+    gap: 8px;
+  }
+
+  .cat-stat-row {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .mastery-dist {
+    grid-template-columns: 1fr;
+  }
+}
 </style>

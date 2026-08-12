@@ -1027,4 +1027,52 @@ function statusLabel(s: string) {
 
   &:hover { background: var(--border-strong); }
 }
+
+// ===== 移动端响应式 =====
+@media (max-width: 768px) {
+  .quiz-header {
+    padding: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .quiz-progress {
+    font-size: 12px;
+  }
+
+  .quiz-question {
+    padding: 16px;
+  }
+
+  .quiz-question h3 {
+    font-size: 16px;
+  }
+
+  .quiz-options {
+    gap: 8px;
+  }
+
+  .quiz-option {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .quiz-result {
+    padding: 16px;
+  }
+
+  .quiz-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .quiz-actions button {
+    width: 100%;
+  }
+
+  pre {
+    font-size: 11px;
+    padding: 10px;
+  }
+}
 </style>
