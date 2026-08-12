@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 
 export default defineConfig({
-  base: '/webgis-frontend-interview-handbook/quiz-app/',
+  base: '/webgis-frontend-interview-handbook/',
   plugins: [vue()],
   resolve: {
     alias: {
