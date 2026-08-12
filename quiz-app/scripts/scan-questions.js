@@ -132,6 +132,7 @@ export const categories: CategoryInfo[] = (() => {
 export const totalQuestions = questions.length
 `
 
+fs.mkdirSync(path.dirname(OUTPUT), { recursive: true })
 fs.writeFileSync(OUTPUT, tsContent, 'utf-8')
 console.log(`✅ 扫描完成！共 ${questions.length} 道面试题，${new Set(questions.map(q => q.category)).size} 个分类。`)
 console.log(`📁 数据已写入: ${path.relative(__dirname, OUTPUT)}`)
